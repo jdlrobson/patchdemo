@@ -5,4 +5,5 @@ composer
 composer.lock
 vendor
 wikicache.json
+redirects.txt
 node_modules
