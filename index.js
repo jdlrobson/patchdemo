@@ -2,6 +2,7 @@
 ( function () {
 	var myWikis, closedWikis, branchSelect, form, submit, showClosed,
 		presetInput, reposField, reposInput, reposFieldLabel,
+		notifField, notifToggle,
 		$wikisTable = $( '.wikis' );
 
 	function updateTableClasses() {
@@ -89,6 +90,32 @@
 		} ) );
 
 		reposInput.emit( 'change' );
+
+		if ( 'Notification' in window ) {
+			notifField = OO.ui.infuse( document.getElementsByClassName( 'enableNotifications' )[ 0 ] );
+			// Enable placholder widget so field label isn't greyed out
+			notifField.fieldWidget.setDisabled( false );
+			notifField.toggle( Notification.permission !== 'denied' );
+
+			notifToggle = new OO.ui.ToggleButtonWidget( {
+				icon: 'bellOutline'
+			} )
+				.on( 'change', function () {
+					Notification.requestPermission().then( function ( permission ) {
+						notifToggle.setValue( permission === 'granted' );
+						if ( permission === 'granted' ) {
+							notifField.setLabel( 'You will get a browser notification when your wikis are ready' );
+						}
+						if ( permission === 'denied' ) {
+							notifField.toggle( false );
+						}
+					} );
+				} )
+				.setValue( Notification.permission === 'granted' );
+
+			notifField.$field.empty().append( notifToggle.$element );
+		}
+
 	}
 
 }() );

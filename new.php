@@ -25,6 +25,7 @@ function abandon( $err ) {
 			pd.installProgressField.fieldWidget.setDisabled( true );
 			pd.installProgressField.fieldWidget.popPending();
 			pd.installProgressField.setErrors( [ $errJson ] );
+			pd.notify( 'Your PatchDemo wiki failed to build', $errJson );
 		</script>
 EOT;
 	delete_wiki( $namePath );
@@ -45,6 +46,7 @@ EOT;
 		<script>
 			pd.installProgressField.fieldWidget.popPending();
 			pd.openWiki.setDisabled( false );
+			pd.notify( 'Your PatchDemo wiki is ready!' );
 		</script>
 EOT;
 	}
