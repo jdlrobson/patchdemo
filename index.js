@@ -1,7 +1,7 @@
 /* global OO, $ */
 ( function () {
 	var myWikis, closedWikis, branchSelect, form, submit, showClosed,
-		presetInput, reposField, reposInput, reposFieldLabel,
+		patchesInput, presetInput, reposField, reposInput, reposFieldLabel,
 		$wikisTable = $( '.wikis' );
 
 	function updateTableClasses() {
@@ -11,10 +11,22 @@
 
 	form = document.getElementById( 'new-form' );
 	if ( form ) {
+		patchesInput = OO.ui.infuse( $( '.form-patches' ) );
+
 		submit = OO.ui.infuse( $( '.form-submit' ) );
-		form.addEventListener( 'submit', function () {
+		form.addEventListener( 'submit', function ( e ) {
+			if ( !patchesInput.getValue().trim() ) {
+				OO.ui.confirm(
+					'Are you sure you want to create a demo with no patches applied?'
+				).then( function ( confirmed ) {
+					if ( confirmed ) {
+						form.submit();
+					}
+				} );
+				e.preventDefault();
+				return;
+			}
 			submit.setDisabled( true );
-			return false;
 		} );
 
 		myWikis = OO.ui.infuse( $( '.myWikis' ) );
